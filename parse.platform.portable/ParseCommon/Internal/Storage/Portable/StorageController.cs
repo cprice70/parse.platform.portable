@@ -1,38 +1,46 @@
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-using PCLStorage;
 using System.Collections.Generic;
 using System.Threading;
+using System.IO;
+using System.Text;
 
-namespace Parse.Common.Internal {
-  /// <summary>
-  /// Implements `IStorageController` for PCL targets, based off of PCLStorage.
-  /// </summary>
-  public class StorageController : IStorageController {
+namespace Parse.Common.Internal
+{
+    /// <summary>
+    /// Implements `IStorageController` for PCL targets, based off of PCLStorage.
+    /// </summary>
+    public class StorageController : IStorageController {
     private class StorageDictionary : IStorageDictionary<string, object> {
-      private object mutex;
-      private Dictionary<string, object> dictionary;
-      private IFile file;
+            private readonly object mutex;
+            private Dictionary<string, object> dictionary;
+            private FileStream file;
 
-      public StorageDictionary(IFile file) {
+      public StorageDictionary(FileStream file) {
         this.file = file;
 
         mutex = new Object();
         dictionary = new Dictionary<string, object>();
       }
 
-      internal Task SaveAsync() {
-        string json;
-        lock (mutex) {
-          json = Json.Encode(dictionary);
-        }
-        return file.WriteAllTextAsync(json);
+      internal Task SaveAsync() 
+      {
+          string json;
+          lock (mutex) 
+          {
+            json = Json.Encode(dictionary);
+          }
+          return file.WriteAsync(Encoding.ASCII.GetBytes(json), 0, json.Length);
       }
 
-      internal Task LoadAsync() {
-        return file.ReadAllTextAsync().ContinueWith(t => {
-          string text = t.Result;
+      internal Task LoadAsync() 
+            {
+                int filesize = (int)file.Length;
+                var buffer = new byte[filesize];
+                return file.ReadAsync(buffer, 0, filesize)
+                           .ContinueWith(t => {
+                               string text = Encoding.ASCII.GetString(buffer);
           Dictionary<string, object> result = null;
           try {
             result = Json.Parse(text) as Dictionary<string, object>;
@@ -109,16 +117,16 @@ namespace Parse.Common.Internal {
 
     private const string ParseStorageFileName = "ApplicationSettings";
     private readonly TaskQueue taskQueue = new TaskQueue();
-    private readonly Task<IFile> fileTask;
+    private readonly Task<FileStream> fileTask;
     private StorageDictionary storageDictionary;
 
     public StorageController() {
       fileTask = taskQueue.Enqueue(t => t.ContinueWith(_ => {
-        return FileSystem.Current.LocalStorage.CreateFileAsync(ParseStorageFileName, CreationCollisionOption.OpenIfExists);
-      }).Unwrap(), CancellationToken.None);
+                return File.OpenWrite(ParseStorageFileName);
+      }), CancellationToken.None);
     }
 
-    public StorageController(IFile file) {
+    public StorageController(FileStream file) {
       this.fileTask = Task.FromResult(file);
     }
 

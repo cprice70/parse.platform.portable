@@ -4,16 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Parse.Utilities;
 using Parse.Common.Internal;
+using Parse.Utilities;
 
-namespace Parse.Core.Internal {
-  /// <summary>
-  /// A <c>ParseEncoder</c> can be used to transform objects such as <see cref="ParseObject"/> into JSON
-  /// data structures.
-  /// </summary>
-  /// <seealso cref="ParseDecoder"/>
-  public abstract class ParseEncoder {
+namespace Parse.Core.Internal
+{
+    /// <summary>
+    /// A <c>ParseEncoder</c> can be used to transform objects such as <see cref="ParseObject"/> into JSON
+    /// data structures.
+    /// </summary>
+    /// <seealso cref="ParseDecoder"/>
+    public abstract class ParseEncoder {
 #if UNITY
     private static readonly bool isCompiledByIL2CPP = AppDomain.CurrentDomain.FriendlyName.Equals("IL2CPP Root Domain");
 #else

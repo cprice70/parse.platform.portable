@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using Parse.Utilities;
 
-namespace Parse.Core.Internal {
-  public class ParseDecoder {
+namespace Parse.Core.Internal
+{
+    public class ParseDecoder {
     // This class isn't really a Singleton, but since it has no state, it's more efficient to get
     // the default instance.
     private static readonly ParseDecoder instance = new ParseDecoder();

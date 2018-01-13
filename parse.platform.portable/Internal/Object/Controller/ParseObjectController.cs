@@ -5,11 +5,12 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse.Utilities;
 using Parse.Common.Internal;
+using Parse.Utilities;
 
-namespace Parse.Core.Internal {
-  public class ParseObjectController : IParseObjectController {
+namespace Parse.Core.Internal
+{
+    public class ParseObjectController : IParseObjectController {
     private readonly IParseCommandRunner commandRunner;
 
     public ParseObjectController(IParseCommandRunner commandRunner) {

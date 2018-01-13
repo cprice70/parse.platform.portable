@@ -4,4 +4,76 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Public\" />
+    <Folder Include="ParseCommon\" />
+    <Folder Include="ParseCommon\Internal\" />
+    <Folder Include="ParseCommon\Public\" />
+    <Folder Include="ParseCommon\Public\Utilities\" />
+    <Folder Include="ParseCommon\Internal\" />
+    <Folder Include="ParseCommon\Internal\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Internal\Internal\IParseCorePlugins.cs" />
+    <Compile Remove="Internal\Internal\ParseCorePlugins.cs" />
+    <Compile Remove="Internal\Internal\Authentication\IParseAuthenticationProvider.cs" />
+    <Compile Remove="Internal\Internal\Cloud\Controller\IParseCloudCodeController.cs" />
+    <Compile Remove="Internal\Internal\Cloud\Controller\ParseCloudCodeController.cs" />
+    <Compile Remove="Internal\Internal\Command\IParseCommandRunner.cs" />
+    <Compile Remove="Internal\Internal\Command\ParseCommand.cs" />
+    <Compile Remove="Internal\Internal\Command\ParseCommandRunner.cs" />
+    <Compile Remove="Internal\Internal\Config\Controller\IParseConfigController.cs" />
+    <Compile Remove="Internal\Internal\Config\Controller\IParseCurrentConfigController.cs" />
+    <Compile Remove="Internal\Internal\Config\Controller\ParseConfigController.cs" />
+    <Compile Remove="Internal\Internal\Config\Controller\ParseCurrentConfigController.cs" />
+    <Compile Remove="Internal\Internal\Encoding\NoObjectsEncoder.cs" />
+    <Compile Remove="Internal\Internal\Encoding\ParseDecoder.cs" />
+    <Compile Remove="Internal\Internal\Encoding\ParseEncoder.cs" />
+    <Compile Remove="Internal\Internal\Encoding\ParseObjectCoder.cs" />
+    <Compile Remove="Internal\Internal\Encoding\PointerOrLocalIdEncoder.cs" />
+    <Compile Remove="Internal\Internal\File\Controller\IParseFileController.cs" />
+    <Compile Remove="Internal\Internal\File\Controller\ParseFileController.cs" />
+    <Compile Remove="Internal\Internal\File\State\FileState.cs" />
+    <Compile Remove="Internal\Internal\InstallationId\Controller\IInstallationIdController.cs" />
+    <Compile Remove="Internal\Internal\InstallationId\Controller\InstallationIdController.cs" />
+    <Compile Remove="Internal\Internal\Object\Controller\IParseObjectController.cs" />
+    <Compile Remove="Internal\Internal\Object\Controller\IParseObjectCurrentController.cs" />
+    <Compile Remove="Internal\Internal\Object\Controller\ParseObjectController.cs" />
+    <Compile Remove="Internal\Internal\Object\State\IObjectState.cs" />
+    <Compile Remove="Internal\Internal\Object\State\MutableObjectState.cs" />
+    <Compile Remove="Internal\Internal\Object\Subclassing\IObjectSubclassingController.cs" />
+    <Compile Remove="Internal\Internal\Object\Subclassing\ObjectSubclassInfo.cs" />
+    <Compile Remove="Internal\Internal\Object\Subclassing\ObjectSubclassingController.cs" />
+    <Compile Remove="Internal\Internal\Operation\IParseFieldOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseAddOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseAddUniqueOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseDeleteOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseFieldOperations.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseIncrementOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseRelationOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseRemoveOperation.cs" />
+    <Compile Remove="Internal\Internal\Operation\ParseSetOperation.cs" />
+    <Compile Remove="Internal\Internal\Query\Controller\IParseQueryController.cs" />
+    <Compile Remove="Internal\Internal\Query\Controller\ParseQueryController.cs" />
+    <Compile Remove="Internal\Internal\Session\Controller\IParseSessionController.cs" />
+    <Compile Remove="Internal\Internal\Session\Controller\ParseSessionController.cs" />
+    <Compile Remove="Internal\Internal\User\Controller\IParseCurrentUserController.cs" />
+    <Compile Remove="Internal\Internal\User\Controller\IParseUserController.cs" />
+    <Compile Remove="Internal\Internal\User\Controller\ParseCurrentUserController.cs" />
+    <Compile Remove="Internal\Internal\User\Controller\ParseUserController.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseConfigExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseFileExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseObjectExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseQueryExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseRelationExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseSessionExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\ParseUserExtensions.cs" />
+    <Compile Remove="Internal\Internal\Utilities\XamarinAttributes.cs" />
+    <Compile Remove="ParseCommon\Internal\Modules\IParseModule.cs" />
+    <Compile Remove="ParseCommon\Internal\Modules\ParseModuleAttribute.cs" />
+    <Compile Remove="ParseCommon\Internal\Modules\ParseModuleController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
 </Project>

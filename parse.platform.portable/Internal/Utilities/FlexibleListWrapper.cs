@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Parse.Core.Internal;
 using Parse.Utilities;
 
 namespace Parse.Common.Internal {

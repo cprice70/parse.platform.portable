@@ -4,15 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Parse.Common.Internal;
 using System.Linq;
+using Parse.Common.Internal;
 
-namespace Parse.Core.Internal {
-  /// <summary>
-  /// ParseCommand is an <see cref="HttpRequest"/> with pre-populated
-  /// headers.
-  /// </summary>
-  public class ParseCommand : HttpRequest {
+namespace Parse.Core.Internal
+{
+    /// <summary>
+    /// ParseCommand is an <see cref="HttpRequest"/> with pre-populated
+    /// headers.
+    /// </summary>
+    public class ParseCommand : HttpRequest {
     public IDictionary<string, object> DataObject { get; private set; }
     public override Stream Data {
       get {

@@ -93,7 +93,6 @@ namespace Parse {
     static ParseClient() {
       versionString = "net-portable-" + Version;
 
-      ParseModuleController.Instance.ScanForModules();
     }
 
     /// <summary>
@@ -150,8 +149,7 @@ namespace Parse {
         ParseObject.RegisterSubclass<ParseRole>();
         ParseObject.RegisterSubclass<ParseSession>();
 
-        ParseModuleController.Instance.ParseDidInitialize();
-      }
+       }
     }
 
     internal static string BuildQueryString(IDictionary<string, object> parameters) {

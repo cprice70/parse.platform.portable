@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Parse.Utilities;
-using Parse.Common.Internal;
 
-namespace Parse.Core.Internal {
-  public class ParseCloudCodeController : IParseCloudCodeController {
+namespace Parse.Core.Internal
+{
+    public class ParseCloudCodeController : IParseCloudCodeController {
     private readonly IParseCommandRunner commandRunner;
 
     public ParseCloudCodeController(IParseCommandRunner commandRunner) {
@@ -24,13 +24,13 @@ namespace Parse.Core.Internal {
           sessionToken: sessionToken,
           data: NoObjectsEncoder.Instance.Encode(parameters) as IDictionary<string, object>);
 
-      return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t => {
+      return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).ContinueWith(t => {
         var decoded = ParseDecoder.Instance.Decode(t.Result.Item2) as IDictionary<string, object>;
         if (!decoded.ContainsKey("result")) {
           return default(T);
         }
         return Conversion.To<T>(decoded["result"]);
-      });
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
   }
 }

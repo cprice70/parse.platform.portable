@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AssemblyLister;
 
-namespace Parse.Common.Internal {
-  /// <summary>
-  /// The class which controls the loading of other ParseModules
-  /// </summary>
-  public class ParseModuleController {
+namespace Parse.Common.Internal
+{
+    /// <summary>
+    /// The class which controls the loading of other ParseModules
+    /// </summary>
+    public class ParseModuleController {
     private static readonly ParseModuleController instance = new ParseModuleController();
     public static ParseModuleController Instance {
       get { return instance; }

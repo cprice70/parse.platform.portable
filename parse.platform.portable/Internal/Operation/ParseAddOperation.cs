@@ -6,8 +6,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Parse.Utilities;
 
-namespace Parse.Core.Internal {
-  public class ParseAddOperation : IParseFieldOperation {
+namespace Parse.Core.Internal
+{
+    public class ParseAddOperation : IParseFieldOperation {
     private ReadOnlyCollection<object> objects;
     public ParseAddOperation(IEnumerable<object> objects) {
       this.objects = new ReadOnlyCollection<object>(objects.ToList());

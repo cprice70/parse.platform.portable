@@ -42,7 +42,8 @@ namespace Parse {
     }
 
     internal ParseConfig()
-      : base() {
+    {
+            
     }
 
     internal ParseConfig(IDictionary<string, object> fetchedConfig) {
