@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using parse.platform.portable.Public;
 
 namespace Parse.Core.Internal {
   // TODO: (richardross) refactor entire parse coder interfaces.
@@ -45,8 +46,8 @@ namespace Parse.Core.Internal {
       });
 
       if (mutableData.ContainsKey("ACL")) {
-        serverData["ACL"] = extractFromDictionary<ParseACL>(mutableData, "ACL", (obj) => {
-          return new ParseACL(obj as IDictionary<string, object>);
+        serverData["ACL"] = extractFromDictionary<ParseAcl>(mutableData, "ACL", (obj) => {
+          return new ParseAcl(obj as IDictionary<string, object>);
         });
       }
 

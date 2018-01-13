@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using parse.platform.portable.Public;
 
 namespace Parse.Core.Internal {
   public interface IParseQueryController {

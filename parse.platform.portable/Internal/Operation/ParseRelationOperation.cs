@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using parse.platform.portable.Public;
 
 namespace Parse.Core.Internal {
   public class ParseRelationOperation : IParseFieldOperation {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Parse.Core.Public
+namespace parse.platform.portable.Public
 {
     /// <summary>
     /// Parse anonymous utils.
@@ -13,7 +13,7 @@ namespace Parse.Core.Public
         /// <summary>
         /// The type of the auth.
         /// </summary>
-        private const string AUTH_TYPE = "anonymous";
+        private const string AuthType = "anonymous";
 
         /// <summary>
         /// Whether the user is logged in anonymously
@@ -21,7 +21,7 @@ namespace Parse.Core.Public
         /// </summary>
         public static bool IsLinked(this ParseUser user)
         {
-            return user.IsLinked(AUTH_TYPE);
+            return user.IsLinked(AuthType);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Parse.Core.Public
         /// <param name="token">Token.</param>
         public static Task<ParseUser> LogInAsync(CancellationToken token)
         {
-            return ParseUser.LogInAsync(AUTH_TYPE, GetAuthData(), token);
+            return ParseUser.LogInAsync(AuthType, GetAuthData(), token);
         }
 
         /// <summary>
@@ -42,9 +42,8 @@ namespace Parse.Core.Public
         {
             return new Dictionary<string, object>
             {
-                { "id", Guid.NewGuid().ToString() }
+                {"id", Guid.NewGuid().ToString()}
             };
         }
-
     }
 }

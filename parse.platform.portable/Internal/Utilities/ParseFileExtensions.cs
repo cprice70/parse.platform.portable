@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using parse.platform.portable.Public;
 
 namespace Parse.Core.Internal {
   /// <summary>

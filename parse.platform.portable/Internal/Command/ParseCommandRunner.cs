@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using parse.platform.portable.Public;
 using Parse.Common.Internal;
 
 namespace Parse.Core.Internal {
@@ -73,8 +74,8 @@ namespace Parse.Core.Internal {
       newCommand.Headers.Add(new KeyValuePair<string, string>("X-Parse-Application-Id", configuration.ApplicationId));
       newCommand.Headers.Add(new KeyValuePair<string, string>("X-Parse-Client-Version", ParseClient.VersionString));
 
-      if (configuration.AdditionalHTTPHeaders != null) {
-        foreach (var header in configuration.AdditionalHTTPHeaders) {
+      if (configuration.AdditionalHttpHeaders != null) {
+        foreach (var header in configuration.AdditionalHttpHeaders) {
           newCommand.Headers.Add(header);
         }
       }

@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
+using parse.platform.portable.Public;
 using Parse.Common.Internal;
 
 namespace Parse.Core.Internal {

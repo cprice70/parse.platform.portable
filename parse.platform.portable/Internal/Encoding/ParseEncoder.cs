@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using parse.platform.portable.Public;
 using Parse.Common.Internal;
 using Parse.Utilities;
 
@@ -26,7 +27,7 @@ namespace Parse.Core.Internal
           ReflectionHelpers.IsPrimitive(value.GetType()) ||
           value is string ||
           value is ParseObject ||
-          value is ParseACL ||
+          value is ParseAcl ||
           value is ParseFile ||
           value is ParseGeoPoint ||
           value is ParseRelationBase ||

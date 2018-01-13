@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using parse.platform.portable.Public;
 using Parse.Utilities;
 
 namespace Parse.Core.Internal

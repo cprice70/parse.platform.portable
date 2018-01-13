@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using parse.platform.portable.Public;
 using Parse.Common.Internal;
 using Parse.Core.Internal;
 

@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using parse.platform.portable.Public;
 
 namespace Parse {
   /// <summary>
   /// Represents a Role on the Parse server. ParseRoles represent groupings
   /// of <see cref="ParseUser"/>s for the purposes of granting permissions (e.g.
-  /// specifying a <see cref="ParseACL"/> for a <see cref="ParseObject"/>. Roles
+  /// specifying a <see cref="ParseAcl"/> for a <see cref="ParseObject"/>. Roles
   /// are specified by their sets of child users and child roles, all of which are granted
   /// any permissions that the parent role has.
   ///
@@ -33,7 +34,7 @@ namespace Parse {
     /// </summary>
     /// <param name="name">The name of the role to create.</param>
     /// <param name="acl">The ACL for this role. Roles must have an ACL.</param>
-    public ParseRole(string name, ParseACL acl)
+    public ParseRole(string name, ParseAcl acl)
       : this() {
       Name = name;
       ACL = acl;

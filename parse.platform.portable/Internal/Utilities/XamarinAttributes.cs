@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using parse.platform.portable.Public;
 using Parse;
 using Parse.Common.Internal;
 

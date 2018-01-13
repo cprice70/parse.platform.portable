@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using parse.platform.portable.Public;
 using Parse.Common.Internal;
 
 namespace Parse {
@@ -1383,8 +1384,8 @@ string propertyName
     /// Gets or sets the ParseACL governing this object.
     /// </summary>
     [ParseFieldName("ACL")]
-    public ParseACL ACL {
-      get { return GetProperty<ParseACL>(null, "ACL"); }
+    public ParseAcl ACL {
+      get { return GetProperty<ParseAcl>(null, "ACL"); }
       set { SetProperty(value, "ACL"); }
     }
 
