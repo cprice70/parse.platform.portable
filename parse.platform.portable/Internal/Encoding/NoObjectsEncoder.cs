@@ -2,24 +2,25 @@
 
 using System;
 using System.Collections.Generic;
+using Parse.Public;
 
-namespace Parse.Core.Internal {
-  /// <summary>
-  /// A <see cref="ParseEncoder"/> that throws an exception if it attempts to encode
-  /// a <see cref="ParseObject"/>
-  /// </summary>
-  public class NoObjectsEncoder : ParseEncoder {
-    // This class isn't really a Singleton, but since it has no state, it's more efficient to get
-    // the default instance.
-    private static readonly NoObjectsEncoder instance = new NoObjectsEncoder();
-    public static NoObjectsEncoder Instance {
-      get {
-        return instance;
-      }
-    }
+namespace Parse.Internal.Encoding
+{
+    /// <inheritdoc />
+    /// <summary>
+    /// A <see cref="T:Parse.Core.Internal.ParseEncoder" /> that throws an exception if it attempts to encode
+    /// a <see cref="T:Parse.ParseObject" />
+    /// </summary>
+    public class NoObjectsEncoder : ParseEncoder
+    {
+        // This class isn't really a Singleton, but since it has no state, it's more efficient to get
+        // the default instance.
 
-    protected override IDictionary<string, object> EncodeParseObject(ParseObject value) {
-      throw new ArgumentException("ParseObjects not allowed here.");
+        public static NoObjectsEncoder Instance { get; } = new NoObjectsEncoder();
+
+        protected override IDictionary<string, object> EncodeParseObject(ParseObject value)
+        {
+            throw new ArgumentException("ParseObjects not allowed here.");
+        }
     }
-  }
 }

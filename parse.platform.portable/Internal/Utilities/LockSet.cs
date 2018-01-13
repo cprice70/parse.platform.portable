@@ -4,40 +4,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Parse.Common.Internal {
-  public class LockSet {
-    private static readonly ConditionalWeakTable<object, IComparable> stableIds =
-        new ConditionalWeakTable<object, IComparable>();
-    private static long nextStableId = 0;
+namespace Parse.Internal.Utilities
+{
+    public class LockSet
+    {
+        private static readonly ConditionalWeakTable<object, IComparable> StableIds =
+            new ConditionalWeakTable<object, IComparable>();
 
-    private readonly IEnumerable<object> mutexes;
+        private static long _nextStableId;
 
-    public LockSet(IEnumerable<object> mutexes) {
-      this.mutexes = (from mutex in mutexes
-                      orderby GetStableId(mutex)
-                      select mutex).ToList();
+        private readonly IEnumerable<object> _mutexes;
+
+        public LockSet(IEnumerable<object> mutexes)
+        {
+            _mutexes = (from mutex in mutexes
+                orderby GetStableId(mutex)
+                select mutex).ToList();
+        }
+
+        public void Enter()
+        {
+            foreach (var mutex in _mutexes)
+            {
+                Monitor.Enter(mutex);
+            }
+        }
+
+        public void Exit()
+        {
+            foreach (var mutex in _mutexes)
+            {
+                Monitor.Exit(mutex);
+            }
+        }
+
+        private static IComparable GetStableId(object mutex)
+        {
+            lock (StableIds)
+            {
+                return StableIds.GetValue(mutex, k => _nextStableId++);
+            }
+        }
     }
-
-    public void Enter() {
-      foreach (var mutex in mutexes) {
-        Monitor.Enter(mutex);
-      }
-    }
-
-    public void Exit() {
-      foreach (var mutex in mutexes) {
-        Monitor.Exit(mutex);
-      }
-    }
-
-    private static IComparable GetStableId(object mutex) {
-      lock (stableIds) {
-        return stableIds.GetValue(mutex, k => nextStableId++);
-      }
-    }
-  }
 }

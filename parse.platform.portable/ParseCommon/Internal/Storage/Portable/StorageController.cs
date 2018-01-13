@@ -1,12 +1,13 @@
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
-using System.Threading;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Parse.Internal.Utilities;
 
-namespace Parse.Common.Internal
+namespace Parse.ParseCommon.Internal.Storage.Portable
 {
     /// <summary>
     /// Implements `IStorageController` for PCL targets, based off of PCLStorage.

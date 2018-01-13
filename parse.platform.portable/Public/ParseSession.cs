@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.Session.Controller;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>

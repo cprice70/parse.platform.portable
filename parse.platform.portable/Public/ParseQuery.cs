@@ -8,11 +8,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.Encoding;
+using Parse.Internal.Object.Subclassing;
+using Parse.Internal.Query.Controller;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <summary>
     /// The ParseQuery class defines a query that is used to fetch ParseObjects. The

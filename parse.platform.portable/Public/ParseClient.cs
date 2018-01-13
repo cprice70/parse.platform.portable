@@ -4,10 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Parse;
-using Parse.Common.Internal;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <summary>
     /// ParseClient contains static functions that handle global

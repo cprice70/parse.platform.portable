@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
-using Parse.Utilities;
+using Parse.Internal;
+using Parse.Internal.Config.Controller;
+using Parse.Internal.Encoding;
+using Parse.Internal.Utilities;
+using Parse.ParseCommon.Public.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>
@@ -118,7 +120,7 @@ namespace parse.platform.portable.Public
             return false;
         }
 
-        IDictionary<string, object> IJsonConvertible.ToJSON()
+        IDictionary<string, object> IJsonConvertible.ToJson()
         {
             return new Dictionary<string, object>
             {

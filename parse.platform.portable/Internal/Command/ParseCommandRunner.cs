@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using parse.platform.portable.Public;
-using Parse.Common.Internal;
+using Parse.Internal.InstallationId.Controller;
+using Parse.Internal.Utilities;
+using Parse.ParseCommon.Internal.HttpClient;
+using Parse.ParseCommon.Public;
+using Parse.Public;
 
-namespace Parse.Core.Internal {
+namespace Parse.Internal.Command {
   public class ParseCommandRunner : IParseCommandRunner {
     private readonly IHttpClient httpClient;
     private readonly IInstallationIdController installationIdController;

@@ -3,10 +3,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Parse.Core.Internal;
-using Parse.Utilities;
+using Parse.ParseCommon.Public.Utilities;
 
-namespace Parse.Common.Internal {
+namespace Parse.Internal.Utilities {
   /// <summary>
   /// Provides a List implementation that can delegate to any other
   /// list, regardless of its value type. Used for coercion of

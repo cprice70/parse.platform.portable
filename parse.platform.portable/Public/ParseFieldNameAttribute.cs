@@ -2,7 +2,7 @@
 
 using System;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>

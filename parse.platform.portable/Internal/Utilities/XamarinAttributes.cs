@@ -1,12 +1,9 @@
 using System;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using parse.platform.portable.Public;
-using Parse;
-using Parse.Common.Internal;
+using System.Threading;
+using Parse.Public;
 
-namespace Parse.Core.Internal {
+namespace Parse.Internal.Utilities {
   /// <summary>
   /// A reimplementation of Xamarin's PreserveAttribute.
   /// This allows us to support AOT and linking for Xamarin platforms.

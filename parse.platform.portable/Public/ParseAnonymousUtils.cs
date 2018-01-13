@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <summary>
     /// Parse anonymous utils.

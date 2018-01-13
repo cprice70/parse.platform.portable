@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
-using Parse;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.Object.Subclassing;
+using Parse.Internal.Operation;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>
@@ -56,7 +57,7 @@ namespace parse.platform.portable.Public
             TargetClassName = change.TargetClassName;
         }
 
-        IDictionary<string, object> IJsonConvertible.ToJSON()
+        IDictionary<string, object> IJsonConvertible.ToJson()
         {
             return new Dictionary<string, object>
             {

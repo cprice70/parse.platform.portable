@@ -2,10 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using Parse;
-using Parse.Common.Internal;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc cref="IJsonConvertible" />
     ///  <summary>
@@ -95,7 +94,7 @@ namespace parse.platform.portable.Public
             return new ParseGeoDistance(2 * Math.Asin(Math.Sqrt(a)));
         }
 
-        IDictionary<string, object> IJsonConvertible.ToJSON()
+        IDictionary<string, object> IJsonConvertible.ToJson()
         {
             return new Dictionary<string, object>
             {

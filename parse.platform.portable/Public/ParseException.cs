@@ -2,7 +2,7 @@
 
 using System;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <summary>
     /// Exceptions that may occur when sending requests to Parse.

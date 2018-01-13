@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Parse
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>

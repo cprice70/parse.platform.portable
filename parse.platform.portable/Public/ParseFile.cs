@@ -5,18 +5,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.File.Controller;
+using Parse.Internal.File.State;
+using Parse.Internal.Utilities;
+using Parse.ParseCommon.Public;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     ///  <summary>
     ///  ParseFile is a local representation of a file that is saved to the Parse cloud.
     ///  </summary>
     ///  <example>
-    ///  The workflow is to construct a <see cref="T:parse.platform.portable.Public.ParseFile" /> with data and a filename,
+    ///  The workflow is to construct a <see cref="T:Parse.Public.ParseFile" /> with data and a filename,
     ///  then save it and set it as a field on a ParseObject:
     ///  <code>
     ///  var file = new ParseFile("hello.txt",
@@ -112,7 +114,7 @@ namespace parse.platform.portable.Public
 
         #endregion
 
-        IDictionary<string, object> IJsonConvertible.ToJSON()
+        IDictionary<string, object> IJsonConvertible.ToJson()
         {
             if (IsDirty)
             {

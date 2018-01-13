@@ -3,15 +3,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Parse;
-using Parse.Common.Internal;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>
     /// A ParseACL is used to control which users and roles can access or modify a particular object. Each
-    /// <see cref="T:Parse.ParseObject" /> can have its own ParseACL. You can grant read and write permissions
+    /// <see cref="T:Parse.Public.ParseObject" /> can have its own ParseACL. You can grant read and write permissions
     /// separately to specific users, to groups of users that belong to roles, or you can grant permissions
     /// to "the public" so that, for example, any user could read a particular object but only a particular
     /// set of users could write to that object.
@@ -55,7 +54,7 @@ namespace parse.platform.portable.Public
             SetWriteAccess(owner, true);
         }
 
-        IDictionary<string, object> IJsonConvertible.ToJSON()
+        IDictionary<string, object> IJsonConvertible.ToJson()
         {
             var result = new Dictionary<string, object>();
             foreach (var user in _readers.Union(_writers))

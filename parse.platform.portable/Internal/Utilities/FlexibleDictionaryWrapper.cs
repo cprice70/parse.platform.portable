@@ -2,106 +2,111 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Parse.Core.Internal;
-using Parse.Utilities;
+using Parse.ParseCommon.Public.Utilities;
 
-namespace Parse.Common.Internal {
-  /// <summary>
-  /// Provides a Dictionary implementation that can delegate to any other
-  /// dictionary, regardless of its value type. Used for coercion of
-  /// dictionaries when returning them to users.
-  /// </summary>
-  /// <typeparam name="TOut">The resulting type of value in the dictionary.</typeparam>
-  /// <typeparam name="TIn">The original type of value in the dictionary.</typeparam>
-  [Preserve(AllMembers = true, Conditional = false)]
-  public class FlexibleDictionaryWrapper<TOut, TIn> : IDictionary<string, TOut> {
-    private readonly IDictionary<string, TIn> toWrap;
-    public FlexibleDictionaryWrapper(IDictionary<string, TIn> toWrap) {
-      this.toWrap = toWrap;
-    }
+namespace Parse.Internal.Utilities
+{
+    /// <inheritdoc />
+    /// <summary>
+    /// Provides a Dictionary implementation that can delegate to any other
+    /// dictionary, regardless of its value type. Used for coercion of
+    /// dictionaries when returning them to users.
+    /// </summary>
+    /// <typeparam name="TOut">The resulting type of value in the dictionary.</typeparam>
+    /// <typeparam name="TIn">The original type of value in the dictionary.</typeparam>
+    [Preserve(AllMembers = true, Conditional = false)]
+    public class FlexibleDictionaryWrapper<TOut, TIn> : IDictionary<string, TOut>
+    {
+        private readonly IDictionary<string, TIn> _toWrap;
 
-    public void Add(string key, TOut value) {
-      toWrap.Add(key, (TIn)Conversion.ConvertTo<TIn>(value));
-    }
+        public FlexibleDictionaryWrapper(IDictionary<string, TIn> toWrap)
+        {
+            _toWrap = toWrap;
+        }
 
-    public bool ContainsKey(string key) {
-      return toWrap.ContainsKey(key);
-    }
+        public void Add(string key, TOut value)
+        {
+            _toWrap.Add(key, (TIn) Conversion.ConvertTo<TIn>(value));
+        }
 
-    public ICollection<string> Keys {
-      get { return toWrap.Keys; }
-    }
+        public bool ContainsKey(string key)
+        {
+            return _toWrap.ContainsKey(key);
+        }
 
-    public bool Remove(string key) {
-      return toWrap.Remove(key);
-    }
+        public ICollection<string> Keys => _toWrap.Keys;
 
-    public bool TryGetValue(string key, out TOut value) {
-      TIn outValue;
-      bool result = toWrap.TryGetValue(key, out outValue);
-      value = (TOut)Conversion.ConvertTo<TOut>(outValue);
-      return result;
-    }
+        public bool Remove(string key)
+        {
+            return _toWrap.Remove(key);
+        }
 
-    public ICollection<TOut> Values {
-      get {
-        return toWrap.Values
-            .Select(item => (TOut)Conversion.ConvertTo<TOut>(item)).ToList();
-      }
-    }
+        public bool TryGetValue(string key, out TOut value)
+        {
+            var result = _toWrap.TryGetValue(key, out var outValue);
+            value = (TOut) Conversion.ConvertTo<TOut>(outValue);
+            return result;
+        }
 
-    public TOut this[string key] {
-      get {
-        return (TOut)Conversion.ConvertTo<TOut>(toWrap[key]);
-      }
-      set {
-        toWrap[key] = (TIn)Conversion.ConvertTo<TIn>(value);
-      }
-    }
+        public ICollection<TOut> Values
+        {
+            get
+            {
+                return _toWrap.Values
+                    .Select(item => (TOut) Conversion.ConvertTo<TOut>(item)).ToList();
+            }
+        }
 
-    public void Add(KeyValuePair<string, TOut> item) {
-      toWrap.Add(new KeyValuePair<string, TIn>(item.Key,
-          (TIn)Conversion.ConvertTo<TIn>(item.Value)));
-    }
+        public TOut this[string key]
+        {
+            get => (TOut) Conversion.ConvertTo<TOut>(_toWrap[key]);
+            set => _toWrap[key] = (TIn) Conversion.ConvertTo<TIn>(value);
+        }
 
-    public void Clear() {
-      toWrap.Clear();
-    }
+        public void Add(KeyValuePair<string, TOut> item)
+        {
+            _toWrap.Add(new KeyValuePair<string, TIn>(item.Key,
+                (TIn) Conversion.ConvertTo<TIn>(item.Value)));
+        }
 
-    public bool Contains(KeyValuePair<string, TOut> item) {
-      return toWrap.Contains(new KeyValuePair<string, TIn>(item.Key,
-          (TIn)Conversion.ConvertTo<TIn>(item.Value)));
-    }
+        public void Clear()
+        {
+            _toWrap.Clear();
+        }
 
-    public void CopyTo(KeyValuePair<string, TOut>[] array, int arrayIndex) {
-      var converted = from pair in toWrap
-                      select new KeyValuePair<string, TOut>(pair.Key,
-                          (TOut)Conversion.ConvertTo<TOut>(pair.Value));
-      converted.ToList().CopyTo(array, arrayIndex);
-    }
+        public bool Contains(KeyValuePair<string, TOut> item)
+        {
+            return _toWrap.Contains(new KeyValuePair<string, TIn>(item.Key,
+                (TIn) Conversion.ConvertTo<TIn>(item.Value)));
+        }
 
-    public int Count {
-      get { return toWrap.Count; }
-    }
+        public void CopyTo(KeyValuePair<string, TOut>[] array, int arrayIndex)
+        {
+            var converted = from pair in _toWrap
+                select new KeyValuePair<string, TOut>(pair.Key,
+                    (TOut) Conversion.ConvertTo<TOut>(pair.Value));
+            converted.ToList().CopyTo(array, arrayIndex);
+        }
 
-    public bool IsReadOnly {
-      get { return toWrap.IsReadOnly; }
-    }
+        public int Count => _toWrap.Count;
 
-    public bool Remove(KeyValuePair<string, TOut> item) {
-      return toWrap.Remove(new KeyValuePair<string, TIn>(item.Key,
-          (TIn)Conversion.ConvertTo<TIn>(item.Value)));
-    }
+        public bool IsReadOnly => _toWrap.IsReadOnly;
 
-    public IEnumerator<KeyValuePair<string, TOut>> GetEnumerator() {
-      foreach (var pair in toWrap) {
-        yield return new KeyValuePair<string, TOut>(pair.Key,
-            (TOut)Conversion.ConvertTo<TOut>(pair.Value));
-      }
-    }
+        public bool Remove(KeyValuePair<string, TOut> item)
+        {
+            return _toWrap.Remove(new KeyValuePair<string, TIn>(item.Key,
+                (TIn) Conversion.ConvertTo<TIn>(item.Value)));
+        }
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-      return this.GetEnumerator();
+        public IEnumerator<KeyValuePair<string, TOut>> GetEnumerator()
+        {
+            return _toWrap.Select(pair => new KeyValuePair<string, TOut>(pair.Key,
+                (TOut) Conversion.ConvertTo<TOut>(pair.Value))).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
-  }
 }

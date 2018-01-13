@@ -1,13 +1,16 @@
 // Copyright (c) 2015-present, Parse, LLC.  All rights reserved.  This source code is licensed under the BSD-style license found in the LICENSE file in the root directory of this source tree.  An additional grant of patent rights can be found in the PATENTS file in the same directory.
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using parse.platform.portable.Public;
-using Parse.Common.Internal;
+using Parse.Internal.Command;
+using Parse.Internal.Encoding;
+using Parse.Internal.Object.State;
+using Parse.Internal.Operation;
+using Parse.Internal.Utilities;
+using Parse.Public;
 
-namespace Parse.Core.Internal {
+namespace Parse.Internal.User.Controller {
   public class ParseUserController : IParseUserController {
     private readonly IParseCommandRunner commandRunner;
 
@@ -25,7 +28,7 @@ namespace Parse.Core.Internal {
           data: objectJSON);
 
       return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t => {
-        var serverState = ParseObjectCoder.Instance.Decode(t.Result.Item2, ParseDecoder.Instance);
+        var serverState = ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
         serverState = serverState.MutatedClone(mutableClone => {
           mutableClone.IsNew = true;
         });
@@ -46,7 +49,7 @@ namespace Parse.Core.Internal {
           data: null);
 
       return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t => {
-        var serverState = ParseObjectCoder.Instance.Decode(t.Result.Item2, ParseDecoder.Instance);
+        var serverState = ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
         serverState = serverState.MutatedClone(mutableClone => {
           mutableClone.IsNew = t.Result.Item1 == System.Net.HttpStatusCode.Created;
         });
@@ -67,7 +70,7 @@ namespace Parse.Core.Internal {
           });
 
       return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t => {
-        var serverState = ParseObjectCoder.Instance.Decode(t.Result.Item2, ParseDecoder.Instance);
+        var serverState = ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
         serverState = serverState.MutatedClone(mutableClone => {
           mutableClone.IsNew = t.Result.Item1 == System.Net.HttpStatusCode.Created;
         });
@@ -82,7 +85,7 @@ namespace Parse.Core.Internal {
           data: null);
 
       return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t => {
-        return ParseObjectCoder.Instance.Decode(t.Result.Item2, ParseDecoder.Instance);
+        return ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
       });
     }
 

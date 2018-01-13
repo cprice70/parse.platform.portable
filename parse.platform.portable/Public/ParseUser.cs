@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse;
-using Parse.Common.Internal;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.Authentication;
+using Parse.Internal.Object.State;
+using Parse.Internal.User.Controller;
+using Parse.Internal.Utilities;
 
-namespace parse.platform.portable.Public
+namespace Parse.Public
 {
     /// <inheritdoc />
     /// <summary>

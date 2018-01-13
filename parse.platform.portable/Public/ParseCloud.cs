@@ -1,13 +1,12 @@
 // Copyright (c) 2015-present, Parse, LLC.  All rights reserved.  This source code is licensed under the BSD-style license found in the LICENSE file in the root directory of this source tree.  An additional grant of patent rights can be found in the PATENTS file in the same directory.
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using parse.platform.portable.Public;
-using Parse.Core.Internal;
+using Parse.Internal;
+using Parse.Internal.Cloud.Controller;
 
-namespace Parse
+namespace Parse.Public
 {
     /// <summary>
     /// The ParseCloud class provides methods for interacting with Parse Cloud Functions.

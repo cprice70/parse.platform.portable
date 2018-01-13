@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
-using parse.platform.portable.Public;
-using Parse.Common.Internal;
+using Parse.Internal.Utilities;
+using Parse.ParseCommon.Internal.HttpClient;
+using Parse.Public;
 
-namespace Parse.Core.Internal
+namespace Parse.Internal.Command
 {
     /// <summary>
     /// ParseCommand is an <see cref="HttpRequest"/> with pre-populated
@@ -23,10 +23,10 @@ namespace Parse.Core.Internal
         }
 
         return base.Data = (DataObject != null
-          ? new MemoryStream(Encoding.UTF8.GetBytes(Json.Encode(DataObject)))
+          ? new MemoryStream(System.Text.Encoding.UTF8.GetBytes(Json.Encode(DataObject)))
           : null);
       }
-      set { base.Data = value; }
+      protected set { base.Data = value; }
     }
 
     public ParseCommand(string relativeUri,
