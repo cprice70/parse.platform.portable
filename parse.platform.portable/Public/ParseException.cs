@@ -268,6 +268,6 @@ namespace Parse.Public
         /// <summary>
         /// The Parse error code associated with the exception.
         /// </summary>
-        private ErrorCode Code { get; }
+        public ErrorCode Code { get; }
     }
 }

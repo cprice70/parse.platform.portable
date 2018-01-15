@@ -52,7 +52,7 @@ namespace Parse.Internal.Utilities
 
         public static IDictionary<string, object> ServerDataToJSONObjectForSerialization(this ParseObject obj)
         {
-            return obj.ServerDataToJSONObjectForSerialization();
+            return obj.ServerDataToJsonObjectForSerialization();
         }
 
         public static void Set(this ParseObject obj, string key, object value)

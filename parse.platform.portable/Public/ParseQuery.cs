@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -848,14 +849,22 @@ namespace Parse.Public
         /// <returns>The list of ParseObjects that match this query.</returns>
         public Task<IEnumerable<T>> FindAsync(CancellationToken cancellationToken)
         {
-            EnsureNotInstallationQuery();
-            return QueryController.FindAsync(this, ParseUser.CurrentUser, cancellationToken).OnSuccess(t =>
+            try
             {
-                var states = t.Result;
+                EnsureNotInstallationQuery();
+                return QueryController.FindAsync(this, ParseUser.CurrentUser, cancellationToken).OnSuccess(t =>
+                {
+                    var states = t.Result;
 
-                return (from state in states
-                    select ParseObject.FromState<T>(state, ClassName));
-            });
+                    return (from state in states
+                            select ParseObject.FromState<T>(state, ClassName));
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: FindAsync: {ex}");
+                return null;
+            }
         }
 
         /// <summary>

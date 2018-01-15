@@ -116,14 +116,15 @@ namespace Parse.ParseCommon.Internal.Storage.Portable
       }
     }
 
-    private const string ParseStorageFileName = "ApplicationSettings";
+    private const string ParseStorageFileName = "/ApplicationSettings";
     private readonly TaskQueue taskQueue = new TaskQueue();
     private readonly Task<FileStream> fileTask;
     private StorageDictionary storageDictionary;
+        public string ParseStorageFilePath { get; set; } = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments); 
 
     public StorageController() {
       fileTask = taskQueue.Enqueue(t => t.ContinueWith(_ => {
-                return File.OpenWrite(ParseStorageFileName);
+                return File.OpenWrite(ParseStorageFilePath + ParseStorageFileName);
       }), CancellationToken.None);
     }
 

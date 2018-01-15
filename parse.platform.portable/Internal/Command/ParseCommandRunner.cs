@@ -26,7 +26,8 @@ namespace Parse.Internal.Command {
         IProgress<ParseDownloadProgressEventArgs> downloadProgress = null,
         CancellationToken cancellationToken = default(CancellationToken)) {
       return PrepareCommand(command).ContinueWith(commandTask => {
-        return httpClient.ExecuteAsync(commandTask.Result, uploadProgress, downloadProgress, cancellationToken).OnSuccess(t => {
+        return httpClient.ExecuteAsync(commandTask.Result, uploadProgress, downloadProgress, cancellationToken)
+                         .OnSuccess(t => {
           cancellationToken.ThrowIfCancellationRequested();
 
           var response = t.Result;

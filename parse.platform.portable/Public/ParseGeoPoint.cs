@@ -33,7 +33,7 @@ namespace Parse.Public
         /// Gets or sets the latitude of the GeoPoint. Valid range is [-90, 90].
         /// Extremes should not be used.
         /// </summary>
-        private double Latitude
+        public double Latitude
         {
             get => _latitude;
             set
@@ -54,7 +54,7 @@ namespace Parse.Public
         /// Gets or sets the longitude. Valid range is [-180, 180].
         /// Extremes should not be used.
         /// </summary>
-        private double Longitude
+        public double Longitude
         {
             get => _longitude;
             set

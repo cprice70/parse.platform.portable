@@ -22,7 +22,6 @@ namespace Parse.Public
         private static readonly IDictionary<string, IParseAuthenticationProvider> AuthProviders =
             new Dictionary<string, IParseAuthenticationProvider>();
 
-
         private static readonly HashSet<string> ReadOnlyKeys = new HashSet<string>
         {
             "sessionToken",
@@ -45,7 +44,7 @@ namespace Parse.Public
         {
             get
             {
-                lock (mutex)
+                lock (LockObject)
                 {
                     return SessionToken != null &&
                            CurrentUser != null &&
@@ -130,7 +129,7 @@ namespace Parse.Public
         /// Gets or sets the username.
         /// </summary>
         [ParseFieldName("username")]
-        private string Username
+        public string Username
         {
             get => GetProperty<string>(null);
             set => SetProperty(value);
@@ -140,7 +139,7 @@ namespace Parse.Public
         /// Sets the password.
         /// </summary>
         [ParseFieldName("password")]
-        private string Password
+        public string Password
         {
             get => GetProperty<string>(null);
             set => SetProperty(value);
@@ -221,8 +220,7 @@ namespace Parse.Public
         /// <param name="cancellationToken">The cancellation token.</param>
         private Task SignUpAsync(CancellationToken cancellationToken)
         {
-            return taskQueue.Enqueue(toAwait => SignUpAsync(toAwait, cancellationToken),
-                cancellationToken);
+            return TaskQueue.Enqueue(toAwait => SignUpAsync(toAwait, cancellationToken), cancellationToken); 
         }
 
         /// <summary>
@@ -304,7 +302,7 @@ namespace Parse.Public
 
         protected override Task SaveAsync(Task toAwait, CancellationToken cancellationToken)
         {
-            lock (mutex)
+            lock (LockObject)
             {
                 if (ObjectId == null)
                 {
@@ -352,7 +350,7 @@ namespace Parse.Public
         /// This is preferable to using <see cref="LogOut()"/>, unless your code is already running from a
         /// background thread.
         /// </remarks>
-        private static Task LogOutAsync()
+        public static Task LogOutAsync()
         {
             return LogOutAsync(CancellationToken.None);
         }
@@ -373,7 +371,7 @@ namespace Parse.Public
                 var user = t.Result;
                 return user == null
                     ? Task.FromResult(0)
-                    : user.taskQueue.Enqueue(toAwait => user.LogOutAsync(toAwait, cancellationToken),
+                    : user.TaskQueue.Enqueue(toAwait => user.LogOutAsync(toAwait, cancellationToken),
                         cancellationToken);
             }).Unwrap();
         }
@@ -542,7 +540,7 @@ namespace Parse.Public
 
         internal Task UpgradeToRevocableSessionAsync(CancellationToken cancellationToken)
         {
-            return taskQueue.Enqueue(toAwait => UpgradeToRevocableSessionAsync(toAwait, cancellationToken),
+            return TaskQueue.Enqueue(toAwait => UpgradeToRevocableSessionAsync(toAwait, cancellationToken),
                 cancellationToken);
         }
 
@@ -601,7 +599,7 @@ namespace Parse.Public
         /// </summary>
         private void CleanupAuthData()
         {
-            lock (mutex)
+            lock (LockObject)
             {
                 if (!CurrentUserController.IsCurrent(this))
                 {
@@ -630,7 +628,7 @@ namespace Parse.Public
         /// </summary>
         private void SynchronizeAllAuthData()
         {
-            lock (mutex)
+            lock (LockObject)
             {
                 var authData = AuthData;
 
@@ -649,7 +647,7 @@ namespace Parse.Public
         private void SynchronizeAuthData(IParseAuthenticationProvider provider)
         {
             var restorationSuccess = false;
-            lock (mutex)
+            lock (LockObject)
             {
                 var authData = AuthData;
                 if (authData == null || provider == null)
@@ -673,7 +671,7 @@ namespace Parse.Public
         internal Task LinkWithAsync(string authType, IDictionary<string, object> data,
             CancellationToken cancellationToken)
         {
-            return taskQueue.Enqueue(toAwait =>
+            return TaskQueue.Enqueue(toAwait =>
             {
                 var authData = AuthData ?? (AuthData = new Dictionary<string, IDictionary<string, object>>());
                 authData[authType] = data;
@@ -703,7 +701,7 @@ namespace Parse.Public
         /// </summary>
         internal bool IsLinked(string authType)
         {
-            lock (mutex)
+            lock (LockObject)
             {
                 return AuthData != null && AuthData.ContainsKey(authType) && AuthData[authType] != null;
             }
@@ -719,7 +717,7 @@ namespace Parse.Public
             {
                 user = FromState<ParseUser>(t.Result, "_User");
 
-                lock (user.mutex)
+                lock (user.LockObject)
                 {
                     if (user.AuthData == null)
                     {

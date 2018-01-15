@@ -35,7 +35,7 @@ namespace Parse.Public
         /// Gets the session token for a user, if they are logged in.
         /// </summary>
         [ParseFieldName("sessionToken")]
-        private string SessionToken => GetProperty<string>(null);
+        public string SessionToken => GetProperty<string>(null);
 
         /// <summary>
         /// Constructs a <see cref="ParseQuery{ParseSession}"/> for ParseSession.
@@ -58,26 +58,27 @@ namespace Parse.Public
         /// <param name="cancellationToken">The cancellation token</param>
         private static Task<ParseSession> GetCurrentSessionAsync(CancellationToken cancellationToken)
         {
-            return ParseUser.GetCurrentUserAsync().OnSuccess(t1 =>
-            {
-                var user = t1.Result;
-                if (user == null)
+            return ParseUser.GetCurrentUserAsync()
+                .OnSuccess(t1 =>
                 {
-                    return Task.FromResult((ParseSession) null);
-                }
+                    var user = t1.Result;
+                    if (user == null)
+                    {
+                        return Task.FromResult((ParseSession) null);
+                    }
 
-                var sessionToken = user.SessionToken;
-                if (sessionToken == null)
-                {
-                    return Task.FromResult((ParseSession) null);
-                }
+                    var sessionToken = user.SessionToken;
+                    if (sessionToken == null)
+                    {
+                        return Task.FromResult((ParseSession) null);
+                    }
 
-                return SessionController.GetSessionAsync(sessionToken, cancellationToken).OnSuccess(t =>
-                {
-                    var session = FromState<ParseSession>(t.Result, "_Session");
-                    return session;
-                });
-            }).Unwrap();
+                    return SessionController.GetSessionAsync(sessionToken, cancellationToken).OnSuccess(t =>
+                    {
+                        var session = FromState<ParseSession>(t.Result, "_Session");
+                        return session;
+                    });
+                }).Unwrap();
         }
 
         internal static Task RevokeAsync(string sessionToken, CancellationToken cancellationToken)

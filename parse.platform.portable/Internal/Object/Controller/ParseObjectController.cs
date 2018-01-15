@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,7 +45,7 @@ namespace Parse.Internal.Object.Controller
             string sessionToken,
             CancellationToken cancellationToken)
         {
-            var objectJson = ParseObject.ToJSONObjectForSaving(operations);
+            var objectJson = ParseObject.ToJsonObjectForSaving(operations);
 
             var command = new ParseCommand(
                 (state.ObjectId == null
@@ -77,7 +78,7 @@ namespace Parse.Internal.Object.Controller
                         : string.Format("classes/{0}/{1}", Uri.EscapeDataString(item.ClassName),
                             Uri.EscapeDataString(item.ObjectId)),
                     method: item.ObjectId == null ? "POST" : "PUT",
-                    data: ParseObject.ToJSONObjectForSaving(ops)))
+                    data: ParseObject.ToJsonObjectForSaving(ops)))
                 .ToList();
 
             var batchTasks = ExecuteBatchRequests(requests, sessionToken, cancellationToken);
@@ -148,96 +149,116 @@ namespace Parse.Internal.Object.Controller
             return tasks;
         }
 
-        private IList<Task<IDictionary<string, object>>> ExecuteBatchRequest(IList<ParseCommand> requests,
+        private IEnumerable<Task<IDictionary<string, object>>> ExecuteBatchRequest(ICollection<ParseCommand> requests,
             string sessionToken,
             CancellationToken cancellationToken)
         {
             var tasks = new List<Task<IDictionary<string, object>>>();
-            int batchSize = requests.Count;
-            var tcss = new List<TaskCompletionSource<IDictionary<string, object>>>();
-            for (int i = 0; i < batchSize; ++i)
+
+            try
             {
-                var tcs = new TaskCompletionSource<IDictionary<string, object>>();
-                tcss.Add(tcs);
-                tasks.Add(tcs.Task);
-            }
-
-            var encodedRequests = requests.Select(r =>
-            {
-                var results = new Dictionary<string, object>
-                {
-                    {"method", r.Method},
-                    {"path", r.Uri.AbsolutePath},
-                };
-
-                if (r.DataObject != null)
-                {
-                    results["body"] = r.DataObject;
-                }
-
-                return results;
-            }).Cast<object>().ToList();
-            var command = new ParseCommand("batch",
-                method: "POST",
-                sessionToken: sessionToken,
-                data: new Dictionary<string, object> {{"requests", encodedRequests}});
-
-            _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).ContinueWith(t =>
-            {
-                if (t.IsFaulted || t.IsCanceled)
-                {
-                    foreach (var tcs in tcss)
-                    {
-                        if (t.IsFaulted)
-                        {
-                            tcs.TrySetException(t.Exception);
-                        }
-                        else if (t.IsCanceled)
-                        {
-                            tcs.TrySetCanceled();
-                        }
-                    }
-
-                    return;
-                }
-
-                var resultsArray = Conversion.As<IList<object>>(t.Result.Item2["results"]);
-                int resultLength = resultsArray.Count;
-                if (resultLength != batchSize)
-                {
-                    foreach (var tcs in tcss)
-                    {
-                        tcs.TrySetException(new InvalidOperationException(
-                            "Batch command result count expected: " + batchSize + " but was: " + resultLength + "."));
-                    }
-
-                    return;
-                }
-
+                var batchSize = requests.Count;
+                var tcss = new List<TaskCompletionSource<IDictionary<string, object>>>();
                 for (var i = 0; i < batchSize; ++i)
                 {
-                    var result = resultsArray[i] as Dictionary<string, object>;
-                    var tcs = tcss[i];
-
-                    if (result != null && result.ContainsKey("success"))
-                    {
-                        tcs.TrySetResult(result["success"] as IDictionary<string, object>);
-                    }
-                    else if (result != null && result.ContainsKey("error"))
-                    {
-                        if (!(result["error"] is IDictionary<string, object> error)) continue;
-                        var errorCode = (long) error["code"];
-                        tcs.TrySetException(new ParseException((ParseException.ErrorCode) errorCode,
-                            error["error"] as string));
-                    }
-                    else
-                    {
-                        tcs.TrySetException(new InvalidOperationException(
-                            "Invalid batch command response."));
-                    }
+                    var tcs = new TaskCompletionSource<IDictionary<string, object>>();
+                    tcss.Add(tcs);
+                    tasks.Add(tcs.Task);
                 }
-            });
 
+                var encodedRequests = requests.Select(r =>
+                {
+                    var results = new Dictionary<string, object>
+                    {
+                    {"method", r.Method},
+                    {"path", r.Uri.AbsolutePath},
+                    };
+
+                    if (r.DataObject != null)
+                    {
+                        results["body"] = r.DataObject;
+                    }
+
+                    return results;
+                }).Cast<object>().ToList();
+
+                if (encodedRequests == null)
+                    Debug.WriteLine("Break");
+
+                var command = new ParseCommand("batch",
+                    method: "POST",
+                    sessionToken: sessionToken,
+                    data: new Dictionary<string, object> { { "requests", encodedRequests } });
+
+                try
+                {
+                    _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken)
+                        .ContinueWith(t =>
+                        {
+                            if (t.IsFaulted || t.IsCanceled)
+                            {
+                                foreach (var tcs in tcss)
+                                {
+                                    if (t.IsFaulted)
+                                    {
+                                        tcs.TrySetException(t.Exception);
+                                    }
+                                    else if (t.IsCanceled)
+                                    {
+                                        tcs.TrySetCanceled();
+                                    }
+                                }
+
+                                return;
+                            }
+
+                            var resultsArray = Conversion.As<IList<object>>(t.Result.Item2["results"]);
+                            var resultLength = resultsArray.Count;
+                            if (resultLength != batchSize)
+                            {
+                                foreach (var tcs in tcss)
+                                {
+                                    tcs.TrySetException(new InvalidOperationException(
+                                        "Batch command result count expected: " + batchSize + " but was: " + resultLength + "."));
+                                }
+
+                                return;
+                            }
+
+                            for (var i = 0; i < batchSize; ++i)
+                            {
+                                var result = resultsArray[i] as Dictionary<string, object>;
+                                var tcs = tcss[i];
+
+                                if (result != null && result.ContainsKey("success"))
+                                {
+                                    tcs.TrySetResult(result["success"] as IDictionary<string, object>);
+                                }
+                                else if (result != null && result.ContainsKey("error"))
+                                {
+                                    if (!(result["error"] is IDictionary<string, object> error)) continue;
+                                    var errorCode = (long)error["code"];
+                                    tcs.TrySetException(new ParseException((ParseException.ErrorCode)errorCode,
+                                        error["error"] as string));
+                                }
+                                else
+                                {
+                                    tcs.TrySetException(new InvalidOperationException(
+                                        "Invalid batch command response."));
+                                }
+                            }
+                        }, cancellationToken);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception: {ex}");
+            }
             return tasks;
         }
     }

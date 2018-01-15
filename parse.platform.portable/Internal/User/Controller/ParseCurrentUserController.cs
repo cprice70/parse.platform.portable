@@ -61,7 +61,7 @@ namespace Parse.Internal.User.Controller
                     else
                     {
                         // TODO (hallucinogen): we need to use ParseCurrentCoder instead of this janky encoding
-                        var data = user.ServerDataToJSONObjectForSerialization();
+                        var data = user.ServerDataToJsonObjectForSerialization();
                         data["objectId"] = user.ObjectId;
                         if (user.CreatedAt != null)
                         {

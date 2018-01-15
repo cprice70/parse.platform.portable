@@ -6,10 +6,8 @@
   <ItemGroup>
     <Folder Include="Public\" />
     <Folder Include="ParseCommon\" />
-    <Folder Include="ParseCommon\Internal\" />
     <Folder Include="ParseCommon\Public\" />
     <Folder Include="ParseCommon\Public\Utilities\" />
-    <Folder Include="ParseCommon\Internal\" />
     <Folder Include="ParseCommon\Internal\" />
   </ItemGroup>
   <ItemGroup>

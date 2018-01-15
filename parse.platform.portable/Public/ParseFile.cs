@@ -70,7 +70,7 @@ namespace Parse.Public
         /// <param name="data">The file's data.</param>
         /// <param name="mimeType">To specify the content-type used when uploading the
         /// file, provide this parameter.</param>
-        private ParseFile(string name, Stream data, string mimeType = null)
+        public ParseFile(string name, Stream data, string mimeType = null)
         {
             _state = new FileState
             {
@@ -94,7 +94,7 @@ namespace Parse.Public
         /// the user. After save is called, that name gets prefixed with a unique identifier.
         /// </summary>
         [ParseFieldName("name")]
-        private string Name => _state.Name;
+        public string Name => _state.Name;
 
         /// <summary>
         /// Gets the MIME type of the file. This is either passed in to the constructor or
@@ -108,7 +108,7 @@ namespace Parse.Public
         /// you get the file from a <see cref="ParseObject"/>.
         /// </summary>
         [ParseFieldName("url")]
-        private Uri Url => _state.SecureUrl;
+        public Uri Url => _state.SecureUrl;
 
         private static IParseFileController FileController => ParseCorePlugins.Instance.FileController;
 
@@ -163,7 +163,7 @@ namespace Parse.Public
         /// </summary>
         /// <param name="progress">The progress callback.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        private Task SaveAsync(IProgress<ParseUploadProgressEventArgs> progress,
+        public Task SaveAsync(IProgress<ParseUploadProgressEventArgs> progress,
             CancellationToken cancellationToken)
         {
             return _taskQueue.Enqueue(

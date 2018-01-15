@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "parse.platform.portable", "parse.platform.portable\parse.platform.portable.csproj", "{9A4EF3C5-FAE5-429F-9B10-0AC6C6F3945A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "parse.platform.test", "parse.platform.test\parse.platform.test.csproj", "{5E939A3E-5B56-4637-8D25-E78231FCC95E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{9A4EF3C5-FAE5-429F-9B10-0AC6C6F3945A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A4EF3C5-FAE5-429F-9B10-0AC6C6F3945A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A4EF3C5-FAE5-429F-9B10-0AC6C6F3945A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E939A3E-5B56-4637-8D25-E78231FCC95E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E939A3E-5B56-4637-8D25-E78231FCC95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E939A3E-5B56-4637-8D25-E78231FCC95E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E939A3E-5B56-4637-8D25-E78231FCC95E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
