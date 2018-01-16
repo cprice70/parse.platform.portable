@@ -35,7 +35,7 @@ namespace Parse.Public
         /// Gets the session token for a user, if they are logged in.
         /// </summary>
         [ParseFieldName("sessionToken")]
-        public string SessionToken => GetProperty<string>(null);
+        public string SessionToken => GetProperty<string>(nameof(SessionToken));
 
         /// <summary>
         /// Constructs a <see cref="ParseQuery{ParseSession}"/> for ParseSession.

@@ -18,7 +18,7 @@ using Parse.ParseCommon.Public.Utilities;
 
 namespace Parse.Public
 {
-    /// <inheritdoc cref="IEnumerable" />
+    /// <inheritdoc cref="IEnumerable<KeyValuePair<string, object>>" />
     /// <summary>
     /// The ParseObject is a local representation of data that can be saved and
     /// retrieved from the Parse cloud.</summary>
@@ -36,8 +36,6 @@ namespace Parse.Public
     public class ParseObject : IEnumerable<KeyValuePair<string, object>>, INotifyPropertyChanged
     {
         private const string AutoClassName = "_Automatic";
-
-        private const bool IsCompiledByIl2Cpp = false;
 
         protected readonly object LockObject = new object();
 
@@ -211,9 +209,11 @@ namespace Parse.Public
 
         #endregion
 
-        private static string GetFieldForPropertyName(String className, string propertyName)
+        private static string GetFieldForPropertyName(string className, string propertyName)
         {
-            SubclassingController.GetPropertyMappings(className).TryGetValue(propertyName, out var fieldName);
+           var mapping = SubclassingController.GetPropertyMappings(className);
+                
+            mapping.TryGetValue(propertyName, out var fieldName);
             return fieldName;
         }
 
@@ -552,7 +552,7 @@ namespace Parse.Public
             {
                 var currentOperations = CurrentOperations;
                 _operationSetQueue.AddLast(new Dictionary<string, IParseFieldOperation>());
-                OnPropertyChanged("IsDirty");
+                OnPropertyChanged(nameof(IsDirty));
                 return currentOperations;
             }
         }
@@ -1200,7 +1200,7 @@ namespace Parse.Public
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">The property is
         /// retrieved and <paramref name="key"/> is not found.</exception>
         /// <returns>The value for the key.</returns>
-        public virtual object this[string key]
+        public object this[string key]
         {
             get
             {
@@ -1434,7 +1434,7 @@ namespace Parse.Public
                         result = temp;
                         return true;
                     }
-                    catch (InvalidCastException ex)
+                    catch (InvalidCastException)
                     {
                         result = default(T);
                         return false;
@@ -1540,7 +1540,7 @@ namespace Parse.Public
         [ParseFieldName("ACL")]
         public ParseAcl ACL
         {
-            get => GetProperty<ParseAcl>(null);
+            get => GetProperty<ParseAcl>(nameof(ACL));
             set => SetProperty(value);
         }
 

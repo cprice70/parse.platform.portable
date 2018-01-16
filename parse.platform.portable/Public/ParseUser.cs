@@ -131,7 +131,7 @@ namespace Parse.Public
         [ParseFieldName("username")]
         public string Username
         {
-            get => GetProperty<string>(null);
+            get => GetProperty<string>(nameof(Username));
             set => SetProperty(value);
         }
 
@@ -141,7 +141,7 @@ namespace Parse.Public
         [ParseFieldName("password")]
         public string Password
         {
-            get => GetProperty<string>(null);
+            get => GetProperty<string>(nameof(Password));
             set => SetProperty(value);
         }
 
@@ -151,7 +151,7 @@ namespace Parse.Public
         [ParseFieldName("email")]
         public string Email
         {
-            get => GetProperty<string>(null);
+            get => GetProperty<string>(nameof(Email));
             set => SetProperty(value);
         }
 

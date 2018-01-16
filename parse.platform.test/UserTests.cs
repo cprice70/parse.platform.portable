@@ -1,20 +1,21 @@
-using NUnit.Framework;
-using Moq;
 using System;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Parse.Public;
+using Moq;
+using NUnit.Framework;
 using Parse.Internal;
-using Parse.Internal.Object.State;
-using Parse.Internal.Utilities;
-using Parse.Internal.User.Controller;
-using Parse.Internal.Operation;
 using Parse.Internal.Object.Controller;
+using Parse.Internal.Object.State;
+using Parse.Internal.Operation;
 using Parse.Internal.Session.Controller;
+using Parse.Internal.User.Controller;
+using Parse.Internal.Utilities;
+using Parse.Public;
+using static NUnit.Framework.Assert;
 
-namespace ParseTest
+namespace parse.platform.test
 {
     [TestFixture]
     public class UserTests
@@ -44,9 +45,9 @@ namespace ParseTest
                 }
             };
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.Throws<ArgumentException>(() => user.Remove("username"));
-            Assert.DoesNotThrow(() => user.Remove("name"));
-            Assert.False(user.ContainsKey("name"));
+            Throws<ArgumentException>(() => user.Remove("username"));
+            DoesNotThrow(() => user.Remove("name"));
+            False(user.ContainsKey("name"));
         }
 
         [Test]
@@ -61,7 +62,7 @@ namespace ParseTest
                 }
             };
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.AreEqual("se551onT0k3n", user.SessionToken);
+            AreEqual("se551onT0k3n", user.SessionToken);
         }
 
         [Test]
@@ -76,9 +77,9 @@ namespace ParseTest
             };
             
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.AreEqual("kevin", user.Username);
+            AreEqual("kevin", user.Username);
             user.Username = "ilya";
-            Assert.AreEqual("ilya", user.Username);
+            AreEqual("ilya", user.Username);
         }
 
         [Test]
@@ -93,9 +94,9 @@ namespace ParseTest
                 }
             };
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.AreEqual("hurrah", user.GetState()["password"]);
+            AreEqual("hurrah", user.GetState()["password"]);
             user.Password = "david";
-            Assert.NotNull(user.GetCurrentOperations()["password"]);
+            NotNull(user.GetCurrentOperations()["password"]);
         }
 
         [Test]
@@ -111,9 +112,9 @@ namespace ParseTest
                 }
             };
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.AreEqual("james@parse.com", user.Email);
+            AreEqual("james@parse.com", user.Email);
             user.Email = "bryan@parse.com";
-            Assert.AreEqual("bryan@parse.com", user.Email);
+            AreEqual("bryan@parse.com", user.Email);
         }
 
         [Test]
@@ -138,14 +139,14 @@ namespace ParseTest
                 }
             };
             var user = ParseObjectExtensions.FromState<ParseUser>(state, "_User");
-            Assert.AreEqual(1, user.GetAuthData().Count);
-            Assert.IsInstanceOf<IDictionary<string, object>>(user.GetAuthData()["facebook"]);
+            AreEqual(1, user.GetAuthData().Count);
+            IsInstanceOf<IDictionary<string, object>>(user.GetAuthData()["facebook"]);
         }
 
         [Test]
         public void TestGetUserQuery()
         {
-            Assert.IsInstanceOf<ParseQuery<ParseUser>>(ParseUser.Query);
+            IsInstanceOf<ParseQuery<ParseUser>>(ParseUser.Query);
         }
 
         [Test]
@@ -170,7 +171,7 @@ namespace ParseTest
             ParseObject.RegisterSubclass<ParseUser>();
             ParseObject.RegisterSubclass<ParseSession>();
 
-            Assert.True(user.IsAuthenticated);
+            True(user.IsAuthenticated);
         }
 
         [Test]
@@ -205,7 +206,7 @@ namespace ParseTest
             ParseObject.RegisterSubclass<ParseUser>();
             ParseObject.RegisterSubclass<ParseSession>();
 
-            Assert.False(user2.IsAuthenticated);
+            False(user2.IsAuthenticated);
         }
 
         [Test]
@@ -223,8 +224,8 @@ namespace ParseTest
 
             return user.SignUpAsync().ContinueWith(t =>
             {
-                Assert.True(t.IsFaulted);
-                if (t.Exception != null) Assert.IsInstanceOf<InvalidOperationException>(t.Exception.InnerException);
+                True(t.IsFaulted);
+                if (t.Exception != null) IsInstanceOf<InvalidOperationException>(t.Exception.InnerException);
             });
         }
 
@@ -259,15 +260,15 @@ namespace ParseTest
 
             return user.SignUpAsync().ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockController.Verify(obj => obj.SignUpAsync(It.IsAny<IObjectState>(),
                     It.IsAny<IDictionary<string, IParseFieldOperation>>(),
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.False(user.IsDirty);
-                Assert.AreEqual("ihave", user.Username);
-                Assert.False(user.GetState().ContainsKey("password"));
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
+                False(user.IsDirty);
+                AreEqual("ihave", user.Username);
+                False(user.GetState().ContainsKey("password"));
+                AreEqual("some0neTol4v4", user.ObjectId);
             });
         }
 
@@ -304,16 +305,16 @@ namespace ParseTest
             return ParseUser.LogInAsync("ihave", "adream")
                 .ContinueWith(t =>
                 {
-                    Assert.False(t.IsFaulted);
-                    Assert.False(t.IsCanceled);
+                    False(t.IsFaulted);
+                    False(t.IsCanceled);
                     mockController.Verify(obj => obj.LogInAsync("ihave",
                         "adream",
                         It.IsAny<CancellationToken>()), Times.Exactly(1));
 
                     var user = t.Result;
-                    Assert.False(user.IsDirty);
-                    Assert.Null(user.Username);
-                    Assert.AreEqual("some0neTol4v4", user.ObjectId);
+                    False(user.IsDirty);
+                    Null(user.Username);
+                    AreEqual("some0neTol4v4", user.ObjectId);
                 });
         }
 
@@ -342,14 +343,14 @@ namespace ParseTest
             return ParseUser.BecomeAsync("llaKcolnu")
                             .ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockController.Verify(obj => obj.GetUserAsync("llaKcolnu",
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
 
                 var user = t.Result;
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                Assert.AreEqual("llaKcolnu", user.SessionToken);
+                AreEqual("some0neTol4v4", user.ObjectId);
+                AreEqual("llaKcolnu", user.SessionToken);
             });
         }
 
@@ -381,8 +382,8 @@ namespace ParseTest
 
             return ParseUser.LogOutAsync().ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockCurrentUserController.Verify(obj => obj.LogOutAsync(It.IsAny<CancellationToken>()),
                     Times.Exactly(1));
                 mockSessionController.Verify(obj => obj.RevokeAsync("r:llaKcolnu", It.IsAny<CancellationToken>()),
@@ -411,7 +412,7 @@ namespace ParseTest
             ParseObject.RegisterSubclass<ParseUser>();
             ParseObject.RegisterSubclass<ParseSession>();
 
-            Assert.AreEqual(user, ParseUser.CurrentUser);
+            AreEqual(user, ParseUser.CurrentUser);
         }
 
         [Test]
@@ -425,7 +426,7 @@ namespace ParseTest
             ParseObject.RegisterSubclass<ParseUser>();
             ParseObject.RegisterSubclass<ParseSession>();
 
-            Assert.Null(ParseUser.CurrentUser);
+            Null(ParseUser.CurrentUser);
         }
 
         [Test]
@@ -459,11 +460,11 @@ namespace ParseTest
 
             return user.UpgradeToRevocableSessionAsync(CancellationToken.None).ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockSessionController.Verify(obj => obj.UpgradeToRevocableSessionAsync("llaKcolnu",
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.AreEqual("r:llaKcolnu", user.SessionToken);
+                AreEqual("r:llaKcolnu", user.SessionToken);
             });
         }
 
@@ -481,8 +482,8 @@ namespace ParseTest
 
             return ParseUser.RequestPasswordResetAsync("gogo@parse.com").ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockController.Verify(obj => obj.RequestPasswordResetAsync("gogo@parse.com",
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
             });
@@ -526,17 +527,17 @@ namespace ParseTest
 
             return user.SaveAsync().ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockObjectController.Verify(obj => obj.SaveAsync(It.IsAny<IObjectState>(),
                     It.IsAny<IDictionary<string, IParseFieldOperation>>(),
                     It.IsAny<string>(),
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.False(user.IsDirty);
-                Assert.AreEqual("ihave", user.Username);
-                Assert.False(user.GetState().ContainsKey("password"));
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                Assert.AreEqual("rekt", user["Alliance"]);
+                False(user.IsDirty);
+                AreEqual("ihave", user.Username);
+                False(user.GetState().ContainsKey("password"));
+                AreEqual("some0neTol4v4", user.ObjectId);
+                AreEqual("rekt", user["Alliance"]);
             });
         }
 
@@ -577,16 +578,16 @@ namespace ParseTest
 
             return user.FetchAsync().ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockObjectController.Verify(obj => obj.FetchAsync(It.IsAny<IObjectState>(),
                     It.IsAny<string>(),
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.True(user.IsDirty);
-                Assert.AreEqual("ihave", user.Username);
-                Assert.True(user.GetState().ContainsKey("password"));
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                Assert.AreEqual("rekt", user["Alliance"]);
+                True(user.IsDirty);
+                AreEqual("ihave", user.Username);
+                True(user.GetState().ContainsKey("password"));
+                AreEqual("some0neTol4v4", user.ObjectId);
+                AreEqual("rekt", user["Alliance"]);
             });
         }
 
@@ -626,17 +627,17 @@ namespace ParseTest
             return user.LinkWithAsync("parse", new Dictionary<string, object>(), CancellationToken.None).ContinueWith(
                 t =>
                 {
-                    Assert.False(t.IsFaulted);
-                    Assert.False(t.IsCanceled);
+                    False(t.IsFaulted);
+                    False(t.IsCanceled);
                     mockObjectController.Verify(obj => obj.SaveAsync(It.IsAny<IObjectState>(),
                         It.IsAny<IDictionary<string, IParseFieldOperation>>(),
                         It.IsAny<string>(),
                         It.IsAny<CancellationToken>()), Times.Exactly(1));
-                    Assert.False(user.IsDirty);
-                    Assert.NotNull(user.GetAuthData());
-                    Assert.NotNull(user.GetAuthData()["parse"]);
-                    Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                    Assert.AreEqual("ofWords", user["garden"]);
+                    False(user.IsDirty);
+                    NotNull(user.GetAuthData());
+                    NotNull(user.GetAuthData()["parse"]);
+                    AreEqual("some0neTol4v4", user.ObjectId);
+                    AreEqual("ofWords", user["garden"]);
                 });
         }
 
@@ -683,17 +684,17 @@ namespace ParseTest
 
             return user.UnlinkFromAsync("parse", CancellationToken.None).ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockObjectController.Verify(obj => obj.SaveAsync(It.IsAny<IObjectState>(),
                     It.IsAny<IDictionary<string, IParseFieldOperation>>(),
                     It.IsAny<string>(),
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.False(user.IsDirty);
-                Assert.NotNull(user.GetAuthData());
-                Assert.False(user.GetAuthData().ContainsKey("parse"));
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                Assert.AreEqual("ofWords", user["garden"]);
+                False(user.IsDirty);
+                NotNull(user.GetAuthData());
+                False(user.GetAuthData().ContainsKey("parse"));
+                AreEqual("some0neTol4v4", user.ObjectId);
+                AreEqual("ofWords", user["garden"]);
             });
         }
 
@@ -740,18 +741,18 @@ namespace ParseTest
 
             return user.UnlinkFromAsync("parse", CancellationToken.None).ContinueWith(t =>
             {
-                Assert.False(t.IsFaulted);
-                Assert.False(t.IsCanceled);
+                False(t.IsFaulted);
+                False(t.IsCanceled);
                 mockObjectController.Verify(obj => obj.SaveAsync(It.IsAny<IObjectState>(),
                     It.IsAny<IDictionary<string, IParseFieldOperation>>(),
                     It.IsAny<string>(),
                     It.IsAny<CancellationToken>()), Times.Exactly(1));
-                Assert.False(user.IsDirty);
-                Assert.NotNull(user.GetAuthData());
-                Assert.True(user.GetAuthData().ContainsKey("parse"));
-                Assert.Null(user.GetAuthData()["parse"]);
-                Assert.AreEqual("some0neTol4v4", user.ObjectId);
-                Assert.AreEqual("ofWords", user["garden"]);
+                False(user.IsDirty);
+                NotNull(user.GetAuthData());
+                True(user.GetAuthData().ContainsKey("parse"));
+                Null(user.GetAuthData()["parse"]);
+                AreEqual("some0neTol4v4", user.ObjectId);
+                AreEqual("ofWords", user["garden"]);
             });
         }
 
@@ -782,16 +783,16 @@ namespace ParseTest
             return ParseUserExtensions.LogInWithAsync("parse", new Dictionary<string, object>(), CancellationToken.None)
                 .ContinueWith(t =>
                 {
-                    Assert.False(t.IsFaulted);
-                    Assert.False(t.IsCanceled);
+                    False(t.IsFaulted);
+                    False(t.IsCanceled);
                     mockController.Verify(obj => obj.LogInAsync("parse",
                         It.IsAny<IDictionary<string, object>>(),
                         It.IsAny<CancellationToken>()), Times.Exactly(1));
 
                     var user = t.Result;
-                    Assert.NotNull(user.GetAuthData());
-                    Assert.NotNull(user.GetAuthData()["parse"]);
-                    Assert.AreEqual("some0neTol4v4", user.ObjectId);
+                    NotNull(user.GetAuthData());
+                    NotNull(user.GetAuthData()["parse"]);
+                    AreEqual("some0neTol4v4", user.ObjectId);
                 });
         }
 
@@ -806,23 +807,23 @@ namespace ParseTest
 
             foreach (var key in immutableKeys)
             {
-                Assert.Throws<InvalidOperationException>(() =>
+                Throws<InvalidOperationException>(() =>
                     user[key] = "1234567890"
                 );
 
-                Assert.Throws<InvalidOperationException>(() =>
+                Throws<InvalidOperationException>(() =>
                     user.Add(key, "1234567890")
                 );
 
-                Assert.Throws<InvalidOperationException>(() =>
+                Throws<InvalidOperationException>(() =>
                     user.AddRangeUniqueToList(key, new[] {"1234567890"})
                 );
 
-                Assert.Throws<InvalidOperationException>(() =>
+                Throws<InvalidOperationException>(() =>
                     user.Remove(key)
                 );
 
-                Assert.Throws<InvalidOperationException>(() =>
+                Throws<InvalidOperationException>(() =>
                     user.RemoveAllFromList(key, new[] {"1234567890"})
                 );
             }
