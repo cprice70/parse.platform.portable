@@ -22,6 +22,7 @@ namespace Parse.ParseCommon.Internal.Storage
         Task<IStorageDictionary<string, object>> SaveAsync(IDictionary<string, object> contents);
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// An interface for a dictionary that is persisted to disk asynchronously.
     /// </summary>
@@ -29,11 +30,10 @@ namespace Parse.ParseCommon.Internal.Storage
     /// <typeparam name="TValue">The value type of the dictionary.</typeparam>
     public interface IStorageDictionary<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
     {
-        int Count { get; }
-        TValue this[TKey key] { get; }
+        //int Count { get; }
 
-        IEnumerable<TKey> Keys { get; }
-        IEnumerable<TValue> Values { get; }
+        //IEnumerable<TKey> Keys { get; }
+        //IEnumerable<TValue> Values { get; }
 
         bool ContainsKey(TKey key);
         bool TryGetValue(TKey key, out TValue value);

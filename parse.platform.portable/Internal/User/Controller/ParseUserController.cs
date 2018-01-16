@@ -14,24 +14,24 @@ namespace Parse.Internal.User.Controller
 {
     public class ParseUserController : IParseUserController
     {
-        private readonly IParseCommandRunner commandRunner;
+        private readonly IParseCommandRunner _commandRunner;
 
         public ParseUserController(IParseCommandRunner commandRunner)
         {
-            this.commandRunner = commandRunner;
+            _commandRunner = commandRunner;
         }
 
         public Task<IObjectState> SignUpAsync(IObjectState state,
             IDictionary<string, IParseFieldOperation> operations,
             CancellationToken cancellationToken)
         {
-            var objectJSON = ParseObject.ToJsonObjectForSaving(operations);
+            var objectJson = ParseObject.ToJsonObjectForSaving(operations);
 
             var command = new ParseCommand("classes/_User",
                 method: "POST",
-                data: objectJSON);
+                data: objectJson);
 
-            return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t =>
+            return _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t =>
             {
                 var serverState = ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
                 serverState = serverState.MutatedClone(mutableClone => { mutableClone.IsNew = true; });
@@ -53,7 +53,7 @@ namespace Parse.Internal.User.Controller
                 method: "GET",
                 data: null);
 
-            return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken)
+            return _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken)
                 .ContinueWith(result =>
                 {
                     var serverState = ParseObjectCoder.Decode(result.Result.Item2, ParseDecoder.Instance);
@@ -79,7 +79,7 @@ namespace Parse.Internal.User.Controller
                     {"authData", authData}
                 });
 
-            return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t =>
+            return _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t =>
             {
                 var serverState = ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
                 serverState = serverState.MutatedClone(mutableClone =>
@@ -97,10 +97,8 @@ namespace Parse.Internal.User.Controller
                 sessionToken: sessionToken,
                 data: null);
 
-            return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken).OnSuccess(t =>
-            {
-                return ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance);
-            });
+            return _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken)
+                .OnSuccess(t => ParseObjectCoder.Decode(t.Result.Item2, ParseDecoder.Instance));
         }
 
         public Task RequestPasswordResetAsync(string email, CancellationToken cancellationToken)
@@ -112,7 +110,7 @@ namespace Parse.Internal.User.Controller
                     {"email", email}
                 });
 
-            return commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken);
+            return _commandRunner.RunCommandAsync(command, cancellationToken: cancellationToken);
         }
     }
 }

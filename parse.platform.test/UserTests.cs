@@ -276,7 +276,7 @@ namespace parse.platform.test
         [AsyncStateMachine(typeof(UserTests))]
         public Task TestLogIn()
         {
-            var serverState = new MutableObjectState
+            IObjectState state = new MutableObjectState
             {
                 ServerData = new Dictionary<string, object>
                 {
@@ -285,15 +285,15 @@ namespace parse.platform.test
                     {"password", "adream"}
                 }
             };
-            IObjectState newState = new MutableObjectState
-            {
-                ObjectId = "some0neTol4v4"
-            };
+          //  IObjectState newState = new MutableObjectState
+          //  {
+          //      ObjectId = "some0neTol4v4"
+          //  };
 
             var mockController = new Mock<IParseUserController>();
             mockController.Setup(obj => obj.LogInAsync("ihave",
                 "adream",
-                It.IsAny<CancellationToken>())).Returns(Task.FromResult(newState));
+                It.IsAny<CancellationToken>())).Returns(Task.FromResult(state));
             ParseCorePlugins.Instance = new ParseCorePlugins
             {
                 UserController = mockController.Object
@@ -327,16 +327,20 @@ namespace parse.platform.test
                 ObjectId = "some0neTol4v4",
                 ServerData = new Dictionary<string, object>()
                 {
-                    {"sessionToken", "llaKcolnu"}
+                    {"sessionToken", "llaKcolnu"},
+                    {"username", "Test"},
+                    {"password", "Test"}
                 }
             };
             var mockController = new Mock<IParseUserController>();
-            mockController.Setup(obj => obj.GetUserAsync("llaKcolnu",
-                It.IsAny<CancellationToken>())).Returns(Task.FromResult(state));
+            mockController.Setup(obj => obj.GetUserAsync("llaKcolnu", It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(state));
+            
             ParseCorePlugins.Instance = new ParseCorePlugins
             {
                 UserController = mockController.Object
             };
+            
             ParseObject.RegisterSubclass<ParseUser>();
             ParseObject.RegisterSubclass<ParseSession>();
 

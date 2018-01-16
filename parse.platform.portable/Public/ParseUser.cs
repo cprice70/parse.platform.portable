@@ -220,7 +220,7 @@ namespace Parse.Public
         /// <param name="cancellationToken">The cancellation token.</param>
         private Task SignUpAsync(CancellationToken cancellationToken)
         {
-            return TaskQueue.Enqueue(toAwait => SignUpAsync(toAwait, cancellationToken), cancellationToken); 
+            return TaskQueue.Enqueue(toAwait => SignUpAsync(toAwait, cancellationToken), cancellationToken);
         }
 
         /// <summary>
@@ -262,15 +262,14 @@ namespace Parse.Public
         /// <param name="password">The password to log in with.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The newly logged-in user.</returns>
-        private static Task<ParseUser> LogInAsync(string username,
-            string password,
-            CancellationToken cancellationToken)
+        private static Task<ParseUser> LogInAsync(string username, string password, CancellationToken cancellationToken)
         {
-            return UserController.LogInAsync(username, password, cancellationToken).OnSuccess(t =>
-            {
-                var user = FromState<ParseUser>(t.Result, "_User");
-                return SaveCurrentUserAsync(user, cancellationToken).OnSuccess(_ => user);
-            }).Unwrap();
+            return UserController.LogInAsync(username, password, cancellationToken)
+                .OnSuccess(t =>
+                {
+                    var user = FromState<ParseUser>(t.Result, "_User");
+                    return SaveCurrentUserAsync(user, cancellationToken).OnSuccess(_ => user);
+                }).Unwrap();
         }
 
         /// <summary>
@@ -293,11 +292,12 @@ namespace Parse.Public
         /// <returns>The user if authorization was successful</returns>
         private static Task<ParseUser> BecomeAsync(string sessionToken, CancellationToken cancellationToken)
         {
-            return UserController.GetUserAsync(sessionToken, cancellationToken).OnSuccess(t =>
-            {
-                var user = FromState<ParseUser>(t.Result, "_User");
-                return SaveCurrentUserAsync(user, cancellationToken).OnSuccess(_ => user);
-            }).Unwrap();
+            return UserController.GetUserAsync(sessionToken, cancellationToken)
+                .OnSuccess(t =>
+                {
+                    var user = FromState<ParseUser>(t.Result, "_User");
+                    return SaveCurrentUserAsync(user, cancellationToken).OnSuccess(_ => user);
+                }).Unwrap();
         }
 
         protected override Task SaveAsync(Task toAwait, CancellationToken cancellationToken)
