@@ -2,6 +2,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Parse</RootNamespace>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageVersion>1.7.1</PackageVersion>
+    <Authors>cprice70</Authors>
+    <PackageProjectUrl>https://github.com/cprice70/parse.platform.portable</PackageProjectUrl>
+    <PackageReleaseNotes>Earlier release of this library
+- Added support for .NET Standard 2.0
+- Some unit tests are still failing however that may be the tests themselves
+- Remove support for Unity for now</PackageReleaseNotes>
+    <Summary>Portable library for Parse Platform.</Summary>
+    <Title>Parse.Platform.Portable</Title>
+    <Description>Portable version of Parse Library.  Support .NET Standard 2.0</Description>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Public\" />
@@ -72,5 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NuGet.Build.Packaging" Version="0.2.0" />
   </ItemGroup>
 </Project>
